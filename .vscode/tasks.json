@@ -1,0 +1,165 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "센서: 상세 진단 (모터 미사용, 10초)",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "args": [
+        "${workspaceFolder}/python/integration_test.py",
+        "--mode",
+        "sensor",
+        "--duration",
+        "10"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PYTHONIOENCODING": "utf-8"
+        }
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      }
+    },
+    {
+      "label": "PID: 계산 미리보기 (10초)",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "args": [
+        "${workspaceFolder}/python/pid_control.py",
+        "--duration",
+        "10"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PYTHONIOENCODING": "utf-8"
+        }
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      }
+    },
+    {
+      "label": "PID: 실제 시연 (30초)",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "args": [
+        "${workspaceFolder}/python/pid_control.py",
+        "--drive",
+        "--duration",
+        "30"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PYTHONIOENCODING": "utf-8"
+        }
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      }
+    },
+    {
+      "label": "통합: 1. 60ms 센서 펌웨어 업로드",
+      "type": "process",
+      "command": "C:/Program Files/Arduino IDE/resources/app/lib/backend/resources/arduino-cli.exe",
+      "args": [
+        "compile",
+        "--fqbn",
+        "arduino:renesas_uno:unor4wifi",
+        "--config-file",
+        "${workspaceFolder}/.vscode/arduino-cli.yaml",
+        "--build-path",
+        "${workspaceFolder}/.build/ultrasonic",
+        "--jobs",
+        "2",
+        "--upload",
+        "--port",
+        "${input:arduinoPort}",
+        "${workspaceFolder}/arduino/ultrasonic_sensor"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "통합: 2. 거리와 모터 위치 동시 수신 (30초)",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "args": [
+        "${workspaceFolder}/python/integration_test.py",
+        "--arduino-port",
+        "${input:arduinoPort}",
+        "--u2d2-port",
+        "${input:u2d2Port}",
+        "--duration",
+        "30"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PYTHONIOENCODING": "utf-8"
+        }
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      }
+    },
+    {
+      "label": "초음파: 시리얼 모니터 (115200)",
+      "type": "process",
+      "command": "C:/Program Files/Arduino IDE/resources/app/lib/backend/resources/arduino-cli.exe",
+      "args": [
+        "monitor",
+        "--config-file",
+        "${workspaceFolder}/.vscode/arduino-cli.yaml",
+        "--port",
+        "${input:arduinoPort}",
+        "--config",
+        "baudrate=115200"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "u2d2Port",
+      "type": "promptString",
+      "description": "모터 U2D2 포트 (현재 COM3)",
+      "default": "COM3"
+    },
+    {
+      "id": "arduinoPort",
+      "type": "promptString",
+      "description": "Arduino 포트 (현재 COM4, COM3는 모터 U2D2)",
+      "default": "COM4"
+    }
+  ]
+}

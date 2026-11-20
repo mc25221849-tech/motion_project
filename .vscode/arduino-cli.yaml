@@ -1,0 +1,6 @@
+# 각 PC의 Arduino CLI 기본 보드/라이브러리 경로를 사용한다.
+# 스케치 빌드 경로는 tasks.json에서 프로젝트 .build 폴더로 지정한다.
+metrics:
+  enabled: false
+updater:
+  enable_notification: false

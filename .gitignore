@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+logs/
+.build/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
